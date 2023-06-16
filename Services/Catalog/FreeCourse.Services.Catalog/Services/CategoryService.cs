@@ -27,7 +27,7 @@ namespace FreeCourse.Services.Catalog.Services
             return Response<List<CategoryDTO>>.Success(_mapper.Map<List<CategoryDTO>>(categories),200);
         }
 
-        public async Task<Response<CategoryDTO>> CreateAsync(CategoryDTO categoryDto)
+        public async Task<Response<CategoryDTO>> CreateAsync(CategoryCreateDTO categoryDto)
         {
             var category = _mapper.Map<Category>(categoryDto);
             await _categoryCollection.InsertOneAsync(category);

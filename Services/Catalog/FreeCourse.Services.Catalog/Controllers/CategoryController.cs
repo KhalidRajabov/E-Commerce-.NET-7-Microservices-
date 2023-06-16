@@ -32,7 +32,7 @@ namespace FreeCourse.Services.Catalog.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CategoryDTO categoryDTO)
+        public async Task<IActionResult> Create(CategoryCreateDTO categoryDTO)
         {
             var response =await _categoryService.CreateAsync(categoryDTO);
             return CreateActionResultInstance(response);
