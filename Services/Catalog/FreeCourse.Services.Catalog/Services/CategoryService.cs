@@ -27,10 +27,11 @@ namespace FreeCourse.Services.Catalog.Services
             return Response<List<CategoryDTO>>.Success(_mapper.Map<List<CategoryDTO>>(categories),200);
         }
 
-        public async Task<Response<CategoryDTO>> CreateAsync(CategoryDTO categoryDTO)
+        public async Task<Response<CategoryDTO>> CreateAsync(CategoryDTO categoryDto)
         {
-            var category = _mapper.Map<Category>(categoryDTO);
-            await _categoryCollection.InsertOneAsync(category);  
+            var category = _mapper.Map<Category>(categoryDto);
+            await _categoryCollection.InsertOneAsync(category);
+
             return Response<CategoryDTO>.Success(_mapper.Map<CategoryDTO>(category), 200);
         }
 
