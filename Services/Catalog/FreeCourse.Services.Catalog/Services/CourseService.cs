@@ -42,12 +42,18 @@ namespace FreeCourse.Services.Catalog.Services
 
         public async Task<Response<CourseDTO>> GetByIdAsync(string id)
         {
-            var course = await _courseCollection.Find<Course>(x => x.Id == id).FirstAsync();
-            if (course == null)
-                return Response<CourseDTO>.Fail("Course not found", 404);
 
-            course.Category = await _categoryCollection.Find<Category>(x => x.Id == course.CategoryId).FirstAsync();
-            return Response<CourseDTO>.Success(_mapper.Map<CourseDTO>(course), 200);
+            try
+            {
+                var course = await _courseCollection.Find<Course>(x => x.Id == id).FirstOrDefaultAsync();
+                if (course == null)
+                    return Response<CourseDTO>.Fail("Course not found", 404);
+                return Response<CourseDTO>.Success(_mapper.Map<CourseDTO>(course), 200);
+            }
+            catch (Exception ex)
+            {
+                return Response<CourseDTO>.Fail("An error occurred while fetching the course: " + ex.Message, 500);
+            }
         }
 
         public async Task<Response<List<CourseDTO>>> GetAllByUserId(string userId)
@@ -62,7 +68,7 @@ namespace FreeCourse.Services.Catalog.Services
             }
             else
             {
-                courses = new List<Course>();
+                return Response<List<CourseDTO>>.Fail("No course found",404);
             }
 
             return Response<List<CourseDTO>>.Success(_mapper.Map<List<CourseDTO>>(courses), 200); 
@@ -70,7 +76,17 @@ namespace FreeCourse.Services.Catalog.Services
 
         public async Task<Response<CourseDTO>> CreateAsync(CourseCreateDTO courseCreateDTO)
         {
-            var newCourse=_mapper.Map<Course>(courseCreateDTO);
+            try
+            {
+                var category = await _categoryCollection.Find<Category>(x => x.Id == courseCreateDTO.CategoryId).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                return Response<CourseDTO>.Fail("An error occurred while fetching the course: " + ex.Message, 404);
+            }
+
+
+            var newCourse =_mapper.Map<Course>(courseCreateDTO);
             newCourse.CreatedTime=DateTime.Now;
             await _courseCollection.InsertOneAsync(newCourse);
 
@@ -88,10 +104,17 @@ namespace FreeCourse.Services.Catalog.Services
 
         public async Task<Response<NoContent>> DeleteAsync(string id)
         {
-            var result=await _courseCollection.DeleteOneAsync(x=>x.Id == id);
-            if (result.DeletedCount > 0)
+            try
+            {
+                var result=await _courseCollection.DeleteOneAsync(x=>x.Id == id);
+                if (result.DeletedCount > 0)
                 return Response<NoContent>.Success(204);
-            return Response<NoContent>.Fail("Course not found", 404);
+            }
+            catch (Exception ex)
+            {
+                return Response<NoContent>.Fail("An error occurred while fetching the course: " + ex.Message, 404);
+            }
+            return Response<NoContent>.Success(204);
         }
     }
 }

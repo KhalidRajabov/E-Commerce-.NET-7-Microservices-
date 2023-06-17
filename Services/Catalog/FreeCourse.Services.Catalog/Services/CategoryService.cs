@@ -37,10 +37,17 @@ namespace FreeCourse.Services.Catalog.Services
 
         public async Task<Response<CategoryDTO>> GetByIdAsync(string id)
         {
-            var category = await _categoryCollection.Find<Category>(x=>x.Id==id).FirstOrDefaultAsync();
-            if (category == null)
-                return Response<CategoryDTO>.Fail("Category not found", 404);
-            return Response<CategoryDTO>.Success(_mapper.Map<CategoryDTO>(category), 200);
+            try
+            {
+                var category = await _categoryCollection.Find<Category>(x => x.Id == id).FirstOrDefaultAsync();
+                if (category == null)
+                    return Response<CategoryDTO>.Fail("Course not found", 404);
+                return Response<CategoryDTO>.Success(_mapper.Map<CategoryDTO>(category), 200);
+            }
+            catch (Exception ex)
+            {
+                return Response<CategoryDTO>.Fail("An error occurred while fetching the course: " + ex.Message, 500);
+            }
         }
     }
 }

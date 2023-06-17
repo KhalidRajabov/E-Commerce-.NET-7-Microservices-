@@ -36,7 +36,7 @@ namespace FreeCourse.Services.Catalog.Controllers
         
         public async Task<IActionResult> GetByUserId(string userId)
         {
-            var response =await _courseService.GetByIdAsync(userId);
+            var response =await _courseService.GetAllByUserId(userId);
             return CreateActionResultInstance(response);
         }
 
