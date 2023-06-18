@@ -2,7 +2,11 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using FreeCourse.IdentityServer.Data;
+using FreeCourse.IdentityServer.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,12 +15,13 @@ using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FreeCourse.IdentityServer
 {
     public class Program
     {
-        public static int Main(string[] args)
+        public static async Task<int> Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
@@ -37,27 +42,27 @@ namespace FreeCourse.IdentityServer
 
             try
             {
-                var seed = args.Contains("/seed");
-                if (seed)
-                {
-                    args = args.Except(new[] { "/seed" }).ToArray();
-                }
-
                 var host = CreateHostBuilder(args).Build();
 
-                if (seed)
+                using (var scope = host.Services.CreateScope())
                 {
-                    Log.Information("Seeding database...");
-                    var config = host.Services.GetRequiredService<IConfiguration>();
-                    var connectionString = config.GetConnectionString("DefaultConnection");
-                    SeedData.EnsureSeedData(connectionString);
-                    Log.Information("Done seeding database.");
+                    var serviceProvider = scope.ServiceProvider;
+
+                    var applicationDbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
+                    applicationDbContext.Database.Migrate();
+
+                    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+                    if (!userManager.Users.Any())
+                    {
+                        await userManager.CreateAsync(new ApplicationUser { UserName = "dante666", Email = "dante666@gmail.com", City = "Baku" }, "Password12*");
+                    }
+
+                    Log.Information("Starting host...");
+                    await host.RunAsync();
                     return 0;
                 }
-
-                Log.Information("Starting host...");
-                host.Run();
-                return 0;
             }
             catch (Exception ex)
             {
