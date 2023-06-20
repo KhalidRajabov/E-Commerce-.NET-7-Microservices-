@@ -5,6 +5,8 @@ Course shop with multiple different kind of databases and microservices.
 Technologies used in the project:
 
 
+
+
 Asynchronous and Synchronous between Microservices
 
 API Gateway ( Ocelot Libarary)
