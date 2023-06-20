@@ -7,24 +7,24 @@ Technologies used in the project:
 
 
 
-Asynchronous and Synchronous between Microservices
+<b>Asynchronous and Synchronous between Microservices</b>
 
-API Gateway ( Ocelot Libarary)
+<b>API Gateway ( Ocelot Libarary)</b>
 
-RabbitMQ
+<b>RabbitMQ</b>
 
-Docker & Docker Compose
+<b>Docker & Docker Compose</b>
 
-IdentityServer4
+<b>IdentityServer4</b>
 
-AccessToken/RefreshToken
+<b>AccessToken/RefreshToken</b>
 
-Domain Driven Design
+<b>Domain Driven Design</b>
 
-CQRS Pattern
+<b>CQRS Pattern</b>
 
-PostgreSQL
+<b>PostgreSQL</b>
 
-MongoDB
+<b>MongoDB</b>
 
-SqlServer
+<b>SqlServer</b>
