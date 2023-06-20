@@ -7,7 +7,7 @@ Technologies used in the project:
 
 
 
-<b>Asynchronous and Synchronous between Microservices</b>
+<b style="color📗">Asynchronous and Synchronous between Microservices</b>
 
 <b>API Gateway ( Ocelot Libarary)</b>
 
