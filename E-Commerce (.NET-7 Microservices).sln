@@ -22,6 +22,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer", "IdentityS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreeCourse.IdentityServer", "IdentityServer\FreeCourse.IdentityServer\FreeCourse.IdentityServer.csproj", "{359289E0-E729-4A72-BBB2-F4F8B5D3991B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Photostock", "Photostock", "{F20555B1-6E6A-4C1B-A27C-0B22C148B60E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeCourse.Services.PhotoStock", "Services\PhotoStock\FreeCourse.Services.PhotoStock\FreeCourse.Services.PhotoStock.csproj", "{97724716-3C30-4712-BF14-D95ED7383F61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +44,10 @@ Global
 		{359289E0-E729-4A72-BBB2-F4F8B5D3991B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{359289E0-E729-4A72-BBB2-F4F8B5D3991B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{359289E0-E729-4A72-BBB2-F4F8B5D3991B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97724716-3C30-4712-BF14-D95ED7383F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97724716-3C30-4712-BF14-D95ED7383F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97724716-3C30-4712-BF14-D95ED7383F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97724716-3C30-4712-BF14-D95ED7383F61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +57,8 @@ Global
 		{AFF4B684-98A1-4DCD-8A63-AB2C06507CD4} = {69A49260-CCDB-4D2C-8FAB-5941F2EF24E2}
 		{2D046B9E-CDA0-49A4-A924-3B077948DF25} = {94561411-AAD5-430E-847D-91A86B096125}
 		{359289E0-E729-4A72-BBB2-F4F8B5D3991B} = {C7CBF916-C3B6-4475-94B6-23DF4E0A8F88}
+		{F20555B1-6E6A-4C1B-A27C-0B22C148B60E} = {32D0552C-95A6-45DE-AFBE-37645D1480A7}
+		{97724716-3C30-4712-BF14-D95ED7383F61} = {F20555B1-6E6A-4C1B-A27C-0B22C148B60E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {355491F3-2E15-4E6D-9933-24A6901A5A8A}

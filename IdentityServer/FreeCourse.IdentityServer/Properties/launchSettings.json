@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "SelfHost": {
+    "FreeCourse.IdentityServer": {
       "commandName": "Project",
       "launchBrowser": false,
       "environmentVariables": {
