@@ -23,6 +23,8 @@ Technologies used in the project:
 
 <b>CQRS Pattern</b>
 
+<b>Redis</b>
+
 <b>PostgreSQL</b>
 
 <b>MongoDB</b>
