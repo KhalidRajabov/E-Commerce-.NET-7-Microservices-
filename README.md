@@ -7,7 +7,7 @@ Technologies used in the project:
 
 
 
-<b>Asynchronous and Synchronous between Microservices</b>
+<b style="color📗">Asynchronous and Synchronous between Microservices</b>
 
 <b>API Gateway ( Ocelot Libarary)</b>
 
@@ -22,6 +22,8 @@ Technologies used in the project:
 <b>Domain Driven Design</b>
 
 <b>CQRS Pattern</b>
+
+<b>Redis</b>
 
 <b>PostgreSQL</b>
 
