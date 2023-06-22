@@ -25,6 +25,8 @@ Technologies used in the project:
 
 <b>Redis</b>
 
+<b>Dapper</b>
+
 <b>PostgreSQL</b>
 
 <b>MongoDB</b>
