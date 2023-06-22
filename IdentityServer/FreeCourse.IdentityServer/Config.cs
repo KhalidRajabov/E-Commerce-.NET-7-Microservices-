@@ -15,7 +15,9 @@ namespace FreeCourse.IdentityServer
             new ApiResource[]
             {
                 new ApiResource("resource_catalog"){Scopes={"catalog_fullpermission"}},
-                new ApiResource("photo_stock_catalog"){Scopes={"catalog_fullpermission"}},
+                new ApiResource("resource_photo_stock"){Scopes={"catalog_fullpermission"}},
+                new ApiResource("resource_basket"){Scopes={"basket_fullpermission"}},
+                new ApiResource("resource_discount"){Scopes={"discount_fullpermission"}},
                 new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
             };
         public static IEnumerable<IdentityResource> IdentityResources =>
@@ -32,12 +34,15 @@ namespace FreeCourse.IdentityServer
             {
                 new ApiScope("catalog_fullpermission","Full access for catalog.API"),
                 new ApiScope("photostock_fullpermission","Full access for photostock.API"),
+                new ApiScope("basket_fullpermission","Full access for basket.API"),
+                new ApiScope("discount_fullpermission","Full access for discount.API"),
                 new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
             };
 
         public static IEnumerable<Client> Clients =>
             new Client[]
             {
+                //without logging in
              new Client
              {
                  ClientName = "Asp.Net Core MVC",
@@ -47,6 +52,8 @@ namespace FreeCourse.IdentityServer
                  //which scopes can access
                  AllowedScopes={ "catalog_fullpermission", "photostock_fullpermission",IdentityServerConstants.LocalApi.ScopeName}
              },
+
+             //for logged in users
              new Client
              {
                  ClientName = "Asp.Net Core MVC",
@@ -55,12 +62,18 @@ namespace FreeCourse.IdentityServer
                  ClientSecrets={new Secret ("secret".Sha256()) },
                  AllowedGrantTypes=GrantTypes.ResourceOwnerPassword,
                  //which scopes can access
-                 AllowedScopes={IdentityServerConstants.StandardScopes.Email, IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile,IdentityServerConstants.StandardScopes.OfflineAccess,IdentityServerConstants.LocalApi.ScopeName,"roles"},
+                 AllowedScopes={
+                     "basket_fullpermission","discount_fullpermission",
+                     IdentityServerConstants.StandardScopes.Email, 
+                     IdentityServerConstants.StandardScopes.OpenId, 
+                     IdentityServerConstants.StandardScopes.Profile,
+                     IdentityServerConstants.StandardScopes.OfflineAccess,
+                     IdentityServerConstants.LocalApi.ScopeName,"roles"
+                 },
                  AccessTokenLifetime=1*60*60,
                  RefreshTokenExpiration=TokenExpiration.Absolute,
                  AbsoluteRefreshTokenLifetime=(int)(DateTime.Now.AddDays(60)-DateTime.Now).TotalSeconds,
                  RefreshTokenUsage=TokenUsage.ReUse
-                
              }
             };
     }

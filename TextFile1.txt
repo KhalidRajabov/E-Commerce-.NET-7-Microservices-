@@ -1,12 +1,23 @@
 Services
 	-catalogApi=>5011
-	-photoStock=>5012
+	-photoStockApi=>5012
 	-basketApi=>5013
+	-discountApi=>5014
 identityServer=>5001
 
 
 
 
+
+PostgreSQL Query:
+
+	create table Discount(
+	Id serial primary key,
+	UserId varchar(100) unique not null,
+	Rate smallint not null,
+	Code varchar(50) not null,
+	CreatedDate timestamp not null default CURRENT_TIMESTAMP
+	)
 
 
 
