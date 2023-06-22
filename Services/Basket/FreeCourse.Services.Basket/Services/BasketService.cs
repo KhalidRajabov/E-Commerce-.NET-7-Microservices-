@@ -15,9 +15,10 @@ namespace FreeCourse.Services.Basket.Services
             _redisService = redisService;
         }
 
-        public Task<Response<bool>> Delete(string userId)
+        public async Task<Response<bool>> Delete(string userId)
         {
-            throw new NotImplementedException();
+            var status = await _redisService.GetDB().KeyDeleteAsync(userId);
+            return status ? Response<bool>.Success(204) : Response<bool>.Fail("Basket not found", 404);
         }
 
         public async Task<Response<BasketDTO>> GetBasket(string userId)
@@ -28,9 +29,10 @@ namespace FreeCourse.Services.Basket.Services
             return Response<BasketDTO>.Success(JsonSerializer.Deserialize<BasketDTO>(existBasket), 200);
         }
 
-        public Task<Response<bool>> SaveOrUpdate(BasketDTO basketDTO)
+        public async Task<Response<bool>> SaveOrUpdate(BasketDTO basketDTO)
         {
-            throw new NotImplementedException();
+            var status = await _redisService.GetDB().StringSetAsync(basketDTO.UserId, JsonSerializer.Serialize(basketDTO));
+            return status ? Response<bool>.Success(204) : Response<bool>.Fail("Could not update or save", 500);
         }
     }
 }

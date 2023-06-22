@@ -3,3 +3,15 @@ Services
 	-photoStock=>5012
 	-basketApi=>5013
 identityServer=>5001
+
+
+
+
+
+
+
+
+
+
+
+CourseLink: https://kapitalbank.udemy.com/course/net-ile-microservices/learn/lecture/25693072?start=0#overview

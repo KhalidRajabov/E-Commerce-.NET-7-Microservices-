@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace FreeCourse.Shared.Services
 {
-    internal interface ISharedIdentityService
+    public interface ISharedIdentityService
     {
+        public string GetUserId { get;}
     }
 }
