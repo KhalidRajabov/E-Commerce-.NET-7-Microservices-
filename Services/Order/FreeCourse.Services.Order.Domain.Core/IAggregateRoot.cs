@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FreeCourse.Services.Order.Domain.Core
 {
-    internal interface İAggregateRoot
+    public interface IAggregateRoot
     {
     }
 }
