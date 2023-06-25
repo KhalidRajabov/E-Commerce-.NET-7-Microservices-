@@ -12,7 +12,7 @@ namespace FreeCourse.Services.Order.Domain.OrderAggregate
         public string ProductId { get;private set; }
         public string ProductName { get;private set; }
         public string PictureURL { get; private set; }
-        public decimal Price { get;private set; }
+        public Decimal Price { get;private set; }
 
         public OrderItem(string productId, string productName, string pictureURL, decimal price)
         {

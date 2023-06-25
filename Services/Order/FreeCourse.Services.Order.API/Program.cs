@@ -1,7 +1,19 @@
+using FreeCourse.Services.Order.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+
+builder.Services.AddDbContext<OrderDbContext>(opt =>
+{
+    //code below means migration folder will be created in another project
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), cnfg =>
+    {
+        cnfg.MigrationsAssembly("FreeCourse.Services.Order.Infrastructure");
+    });
+});
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
