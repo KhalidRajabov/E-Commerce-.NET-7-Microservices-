@@ -20,10 +20,14 @@ namespace FreeCourse.Services.Order.Infrastructure
         {
             //code below asks for table name of entity and schema name
             modelBuilder.Entity<Domain.OrderAggregate.Order>().ToTable("Orders", DEFAULT_SCHEMA);
-            modelBuilder.Entity<Domain.OrderAggregate.OrderItem>().ToTable("Orders", DEFAULT_SCHEMA);
+            modelBuilder.Entity<Domain.OrderAggregate.OrderItem>().ToTable("OrderItems", DEFAULT_SCHEMA);
             modelBuilder.Entity<Domain.OrderAggregate.OrderItem>().Property(x=>x.Price).HasColumnType("decimal(18,2)");
 
 
+
+            //owned means, there will not be created another table named "Address"
+            //Instead, properties of "Address" will be added to Order class as columns
+            //It can be done when there is a class with only a few properties
             //we can make the code below in a different way, like writing [Owned] on the class name of Address
             //But then, Domain will understand that it is working with efcore, which is wrong
             //Because Domain shoul not know what ORM we are using. That is why we write the code below,
