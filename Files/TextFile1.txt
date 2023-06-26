@@ -6,6 +6,7 @@ Services
 	-orderApi=>5015
 	-fakePaymentApi=>5016
 identityServer=>5001
+Gateway=>5000
 
 
 
