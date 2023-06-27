@@ -20,6 +20,7 @@ namespace FreeCourse.IdentityServer
                 new ApiResource("resource_discount"){Scopes={"discount_fullpermission"}},
                 new ApiResource("resource_order"){Scopes={"order_fullpermission"}},
                 new ApiResource("resource_payment"){Scopes={"payment_fullpermission"}},
+                new ApiResource("resource_gateway"){Scopes={"gateway_fullpermission"}},
                 new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
             };
         public static IEnumerable<IdentityResource> IdentityResources =>
@@ -40,6 +41,7 @@ namespace FreeCourse.IdentityServer
                 new ApiScope("discount_fullpermission","Full access for discount.API"),
                 new ApiScope("order_fullpermission","Full access for order.API"),
                 new ApiScope("payment_fullpermission","Full access for payment.API"),
+                new ApiScope("gateway_fullpermission","Full access for gateway.API"),
                 new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
             };
 
@@ -54,7 +56,7 @@ namespace FreeCourse.IdentityServer
                  ClientSecrets={new Secret ("secret".Sha256()) },
                  AllowedGrantTypes=GrantTypes.ClientCredentials,
                  //which scopes can access
-                 AllowedScopes={ "catalog_fullpermission", "photostock_fullpermission",IdentityServerConstants.LocalApi.ScopeName}
+                 AllowedScopes={ "catalog_fullpermission", "photostock_fullpermission", "gateway_fullpermission", IdentityServerConstants.LocalApi.ScopeName}
              },
 
              //for logged in users
@@ -69,6 +71,7 @@ namespace FreeCourse.IdentityServer
                  AllowedScopes={
                      "basket_fullpermission","discount_fullpermission",
                      "order_fullpermission","payment_fullpermission",
+                     "gateway_fullpermission",
                      IdentityServerConstants.StandardScopes.Email, 
                      IdentityServerConstants.StandardScopes.OpenId, 
                      IdentityServerConstants.StandardScopes.Profile,
