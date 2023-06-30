@@ -23,6 +23,8 @@ Technologies used in the project:
 
 <b>CQRS Pattern</b>
 
+<b>Options Pattern</b>
+
 <b>Redis</b>
 
 <b>Dapper</b>
