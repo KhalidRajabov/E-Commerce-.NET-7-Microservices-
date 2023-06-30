@@ -21,6 +21,8 @@ Technologies used in the project:
 
 <b>Domain Driven Design</b>
 
+<b>Repository Pattern</b>
+
 <b>CQRS Pattern</b>
 
 <b>Options Pattern</b>
