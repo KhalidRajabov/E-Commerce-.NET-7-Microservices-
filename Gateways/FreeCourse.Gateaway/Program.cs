@@ -13,7 +13,7 @@ builder.Services.AddAuthentication().AddJwtBearer("GatewayAuthenticationScheme",
 builder.Services.AddOcelot();
 var app = builder.Build();
 
-builder.Configuration.AddJsonFile($"configuration.{builder.Environment.EnvironmentName.ToLower()}.json");
+builder.Configuration.AddJsonFile($"configuration.development.json");
 
 await app.UseOcelot();
 app.UseAuthorization();
