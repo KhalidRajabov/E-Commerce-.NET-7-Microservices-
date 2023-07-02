@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace FreeCourse.Shared.DTOs
 {
-    internal class ErrorDTO
+    public class ErrorDTO
     {
+        public List<string> Errors { get; set; }
     }
 }
