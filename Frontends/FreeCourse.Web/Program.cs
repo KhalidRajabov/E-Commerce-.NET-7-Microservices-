@@ -14,18 +14,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.Configure<ServiceApiSettings>(builder.Configuration.GetSection("ServiceApiSettings"));
+var serviceApiiSettings = builder.Configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
+
 builder.Services.AddScoped<ResourceOwnerPasswordTokenHandler>();
 
 //it substitutes scope service, because IdentitySservice class has httpclient used in its constructor
 builder.Services.AddHttpClient<IIdentityService, IdentityService>();
+builder.Services.AddHttpClient<ICatalogService, CatalogService>(opt =>
+{
+    opt.BaseAddress = new Uri($"{serviceApiiSettings}/{serviceApiiSettings.Catalog.Path}");
+});
 builder.Services.AddHttpClient<IUserService, UserService>(opt =>
 {
-    opt.BaseAddress = new Uri(builder.Configuration.GetSection("ServiceApiSettings")
-        .Get<ServiceApiSettings>().IdentityBaseUri);
+    opt.BaseAddress = new Uri(serviceApiiSettings.IdentityBaseUri);
 }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 //reading configuration from appsettings or another json file and implementing it is called "Options pattern"
 builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
-builder.Services.Configure<ServiceApiSettings>(builder.Configuration.GetSection("ServiceApiSettings"));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
     CookieAuthenticationDefaults.AuthenticationScheme, opts=>{
