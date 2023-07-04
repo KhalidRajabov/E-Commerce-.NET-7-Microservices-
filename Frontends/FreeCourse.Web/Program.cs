@@ -1,7 +1,10 @@
+using Elfie.Serialization;
+using FreeCourse.Web.Handlers;
 using FreeCourse.Web.Models;
 using FreeCourse.Web.Services;
 using FreeCourse.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +14,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddScoped<ResourceOwnerPasswordTokenHandler>();
+
 //it substitutes scope service, because IdentitySservice class has httpclient used in its constructor
 builder.Services.AddHttpClient<IIdentityService, IdentityService>();
+builder.Services.AddHttpClient<IUserService, UserService>(opt =>
+{
+    opt.BaseAddress = new Uri(builder.Configuration.GetSection("ServiceApiSettings")
+        .Get<ServiceApiSettings>().IdentityBaseUri);
+}).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 //reading configuration from appsettings or another json file and implementing it is called "Options pattern"
 builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
 builder.Services.Configure<ServiceApiSettings>(builder.Configuration.GetSection("ServiceApiSettings"));

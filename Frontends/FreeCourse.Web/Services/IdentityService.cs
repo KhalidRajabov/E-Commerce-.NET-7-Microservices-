@@ -27,11 +27,13 @@ namespace FreeCourse.Web.Services
             _serviceApiSettings = serviceApiSettings.Value;
         }
 
+
+        //getting refresh token from cache, then renew it using refresh token from access token
         public async Task<TokenResponse> GetAccessTokenByRefreshToken()
         {
             var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
             {
-                Address = _serviceApiSettings.BaseUri,
+                Address = _serviceApiSettings.IdentityBaseUri,
                 Policy = new DiscoveryPolicy { RequireHttps = false }
             });
 
@@ -75,11 +77,14 @@ namespace FreeCourse.Web.Services
             return token;
         }
 
+
+        //removing refresh token from identityserver database when user logs out for security purposes
+        //user gets new token when they login anyway
         public async Task RevokeRefreshToken()
         {
             var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
             {
-                Address = _serviceApiSettings.BaseUri,
+                Address = _serviceApiSettings.IdentityBaseUri,
                 Policy = new DiscoveryPolicy { RequireHttps = false }
             });
 
@@ -105,7 +110,7 @@ namespace FreeCourse.Web.Services
         {
             var disco = await _httpClient.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
             {
-                Address = _serviceApiSettings.BaseUri,
+                Address = _serviceApiSettings.IdentityBaseUri,
                 Policy = new DiscoveryPolicy { RequireHttps = false }
             });
 
