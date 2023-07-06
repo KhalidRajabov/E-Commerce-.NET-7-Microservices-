@@ -1,6 +1,17 @@
-﻿namespace FreeCourse.Web.Services.Interfaces
+﻿using FreeCourse.Web.Models.Catalog;
+
+namespace FreeCourse.Web.Services.Interfaces
 {
-    public class ICatalogService
+    public interface ICatalogService
     {
+        Task<List<CourseViewModel>> GetAllCourseAsync();
+        Task<List<CategoryViewModel>> GetAllCategoryAsync();
+        Task<List<CourseViewModel>> GetAllCoursesByUserIdAsync(string userId);
+        Task<CourseViewModel> GetCourseById(string courseId);
+        Task<bool> CreateCourseAsync(CourseCreateInput courseCreateInput);
+        Task<bool> UpdateCourseAsync(CourseUpdateInput courseUpdateInput);
+        Task<bool> DeleteCourseAsync(string courseId);
+
+
     }
 }

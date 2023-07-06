@@ -2,5 +2,6 @@
 {
     public class FeatureVIewModel
     {
+        public int Duration { get; set; }
     }
 }
