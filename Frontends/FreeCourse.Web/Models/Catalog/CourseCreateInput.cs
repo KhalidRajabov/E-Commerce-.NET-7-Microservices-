@@ -15,5 +15,6 @@ namespace FreeCourse.Web.Models.Catalog
         public FeatureVIewModel Feature { get; set; }
         
         public string CategoryId { get; set; }
+        public IFormFile PhotoFormFile { get; set; }
     }
 }

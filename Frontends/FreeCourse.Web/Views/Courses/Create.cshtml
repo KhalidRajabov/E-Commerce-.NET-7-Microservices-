@@ -37,6 +37,11 @@
                         <input asp-for="Feature.Duration" class="form-control" />
                         <span asp-validation-for="Feature.Duration" class="text-danger"></span>
                     </div>
+                    <div class="mb-3">
+                        <label asp-for="PhotoFormFile" class="form-label"></label>
+                        <input asp-for="PhotoFormFile" class="form-control" />
+                        <span asp-validation-for="PhotoFormFile" class="text-danger"></span>
+                    </div>
 
                     <button type="submit" class="btn btn-primary">Create</button>
                 </form>

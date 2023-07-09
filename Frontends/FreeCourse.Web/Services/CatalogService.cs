@@ -1,4 +1,5 @@
 ﻿using FreeCourse.Shared.DTOs;
+using FreeCourse.Web.Helpers;
 using FreeCourse.Web.Models.Catalog;
 using FreeCourse.Web.Services.Interfaces;
 
@@ -7,14 +8,20 @@ namespace FreeCourse.Web.Services
     public class CatalogService : ICatalogService
     {
         private readonly HttpClient _httpClient;
-
-        public CatalogService(HttpClient httpClient)
+        private readonly PhotoHelper _photoHelper;
+        private readonly IPhotoStockService _photoStockService;
+        public CatalogService(HttpClient httpClient, IPhotoStockService photoStockService, PhotoHelper photoHelper)
         {
             _httpClient = httpClient;
+            _photoStockService = photoStockService;
+            _photoHelper = photoHelper;
         }
 
         public async Task<bool> CreateCourseAsync(CourseCreateInput courseCreateInput)
         {
+            var resultPhotoService = await _photoStockService.UploadPhoto(courseCreateInput.PhotoFormFile);
+            if (resultPhotoService != null) courseCreateInput.Picture = resultPhotoService.Url;
+
             var response = await _httpClient.PostAsJsonAsync<CourseCreateInput>("course", courseCreateInput);
 
             return response.IsSuccessStatusCode;
@@ -36,6 +43,10 @@ namespace FreeCourse.Web.Services
             if (!response.IsSuccessStatusCode) return null;
 
             var successfullResponse = await response.Content.ReadFromJsonAsync<Response<List<CourseViewModel>>>();
+            successfullResponse.Data.ForEach(x =>
+            {
+                x.Picture = _photoHelper.GetPhotoStockUrl(x.Picture);
+            });
             return successfullResponse.Data;
         }
 
@@ -66,7 +77,10 @@ namespace FreeCourse.Web.Services
             }
 
             var responseSuccess = await response.Content.ReadFromJsonAsync<Response<List<CourseViewModel>>>();
-
+            responseSuccess.Data.ForEach(x =>
+            {
+                x.Picture = _photoHelper.GetPhotoStockUrl(x.Picture);
+            });
             return responseSuccess.Data;
         }
 
