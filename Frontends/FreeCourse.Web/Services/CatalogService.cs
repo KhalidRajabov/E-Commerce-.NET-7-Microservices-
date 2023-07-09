@@ -1,8 +1,6 @@
 ﻿using FreeCourse.Shared.DTOs;
-using FreeCourse.Web.Models;
 using FreeCourse.Web.Models.Catalog;
 using FreeCourse.Web.Services.Interfaces;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FreeCourse.Web.Services
 {
@@ -60,12 +58,16 @@ namespace FreeCourse.Web.Services
             //their request will be send to http://localhost:5000/services/catalog/
 
 
-            //[controller]/ GetByUserId /{ userId}
             var response = await _httpClient.GetAsync($"course/GetByUserId/{userId}");
-            if (!response.IsSuccessStatusCode) return null;
 
-            var successfullResponse = await response.Content.ReadFromJsonAsync<Response<List<CourseViewModel>>>();
-            return successfullResponse.Data;
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var responseSuccess = await response.Content.ReadFromJsonAsync<Response<List<CourseViewModel>>>();
+
+            return responseSuccess.Data;
         }
 
         public async Task<CourseViewModel> GetCourseById(string courseId)
@@ -86,7 +88,11 @@ namespace FreeCourse.Web.Services
 
         public async Task<bool> UpdateCourseAsync(CourseUpdateInput courseUpdateInput)
         {
-            var response = await _httpClient.PutAsJsonAsync<CourseUpdateInput>("course", courseUpdateInput);
+            var request = new HttpRequestMessage(HttpMethod.Put, "course");
+            request.Content = JsonContent.Create(courseUpdateInput);
+
+            var response = await _httpClient.SendAsync(request);
+            var responseContent = await response.Content.ReadAsStringAsync();
 
             return response.IsSuccessStatusCode;
         }

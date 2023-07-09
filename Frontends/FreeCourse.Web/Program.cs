@@ -23,9 +23,11 @@ builder.Services.AddScoped<ClientCredentialTokenHandler>();
 //it substitutes scope service, because IdentitySservice class has httpclient used in its constructor
 builder.Services.AddHttpClient<IIdentityService, IdentityService>();
 builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+
+
 builder.Services.AddHttpClient<ICatalogService, CatalogService>(opt =>
 {
-    opt.BaseAddress = new Uri($"{serviceApiiSettings}/{serviceApiiSettings.Catalog.Path}");
+    opt.BaseAddress = new Uri($"{serviceApiiSettings.GatewayBaseUri}/{serviceApiiSettings.Catalog.Path}");
 }).AddHttpMessageHandler<ClientCredentialTokenHandler>();
 builder.Services.AddHttpClient<IClientCredentialTokenService,ClientCredentialTokenService>();
 builder.Services.AddHttpClient<IUserService, UserService>(opt =>
@@ -33,6 +35,8 @@ builder.Services.AddHttpClient<IUserService, UserService>(opt =>
     opt.BaseAddress = new Uri(serviceApiiSettings.IdentityBaseUri);
 }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 //reading configuration from appsettings or another json file and implementing it is called "Options pattern"
+
+
 builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(

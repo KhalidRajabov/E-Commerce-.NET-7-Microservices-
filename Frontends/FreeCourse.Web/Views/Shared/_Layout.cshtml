@@ -4,10 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FreeCourse.Web</title>
-    <link href="~/lib/bootstrap-5.3.0-dist/css/bootstrap.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap-5.3.0-dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap-5.3.0-dist/css/bootstrap.rtl.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap-5.3.0-dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FreeCourse.Web.styles.css" asp-append-version="true" />
 </head>
@@ -36,18 +35,17 @@
                     }
                     else
                     {
-                        <ul class="navbar-nav">
-                            <li class="nav-item drop-down">
-                                <a class="nac-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                     @User.Identity.Name
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" asp-controller="user" asp-action="index">Profile</a></li>
-                                    <li><a class="dropdown-item" asp-controller="auth" asp-action="logout">Logout</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        
+                        <div class="btn-group dropstart">
+                            <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @User.Identity.Name
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="User" asp-action="Index">Profile</a></li>
+                                <li><a class="dropdown-item" asp-controller="Order" asp-action="CheckoutHistory">Payment History</a></li>
+                                <li><a class="dropdown-item" asp-controller="Basket" asp-action="Index">Card</a></li>
+                                <li><a class="dropdown-item" asp-controller="Auth" asp-action="LogOut">Logout</a></li>
+                            </ul>
+                        </div>                        
                     }
                 </div>
             </div>
@@ -66,13 +64,7 @@
     </footer>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-</body>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/bootstrap-5.3.0-dist/js/bootstrap.bundle.js"></script>
-    <script src="~/lib/bootstrap-5.3.0-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/bootstrap-5.3.0-dist/js/bootstrap.esm.js"></script>
-    <script src="~/lib/bootstrap-5.3.0-dist/js/bootstrap.esm.min.js"></script>
-    <script src="~/lib/bootstrap-5.3.0-dist/js/bootstrap.js"></script>
-    <script src="~/lib/bootstrap-5.3.0-dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
 </html>
