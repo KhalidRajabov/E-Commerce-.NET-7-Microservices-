@@ -57,7 +57,7 @@ namespace FreeCourse.Web.Controllers
 
             var course = await _catalogService.GetCourseById(courseId);
             if (course == null) return RedirectToAction(nameof(Index));
-            CourseUpdateInput courseUpdateInput = new CourseUpdateInput
+            CourseUpdateInput courseUpdateInput = new()
             {
                 Id = course.Id,
                 Name = course.Name,
@@ -79,8 +79,15 @@ namespace FreeCourse.Web.Controllers
 
             var categories = await _catalogService.GetAllCategoryAsync();
             ViewBag.CategoryList = new SelectList(categories, "Id", "Name", courseUpdateInput.Id);
-            if (ModelState.IsValid) return View();
-            courseUpdateInput.Picture = "";
+            if (courseUpdateInput.Picture ==null)
+            {
+                // Retrieve existing product details from the database
+                var existingCourse = await _catalogService.GetCourseById(courseUpdateInput.Id);
+
+                // Assign existing picture to the model
+                courseUpdateInput.Picture = existingCourse.Picture;
+            }
+            if (!ModelState.IsValid) return View();
             await _catalogService.UpdateCourseAsync(courseUpdateInput);
             return RedirectToAction(nameof(Index));
         }
