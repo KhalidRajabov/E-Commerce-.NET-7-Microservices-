@@ -37,6 +37,24 @@
                         <th colspan="2">@Model.TotalPrice USD</th>
                     </tr>
                 </table>
+                <form asp-controller="basket" asp-action="applydiscount">
+                    @if (Model.HasDiscount)
+                    {
+                        <div class="alert alert-success">
+                            "@Model.DiscountCode" has been applied
+                        </div>
+                    }
+
+                    @if (TempData["discountStatus"] != null && (bool)TempData["discountStatus"] == false)
+                    {
+                        <div class="text-danger">Discount code is unavailable</div>
+                    }
+                    <div class="input-group mb-3">
+                        <input type="text" name="DiscountApplyInput.Code" class="form-control">
+                        <div asp-validation-summary="All"></div>
+                        <button class="btn btn-outline-secondary" type="submit">Apply</button>
+                    </div>
+                </form>
             }
         </div>
     </div>

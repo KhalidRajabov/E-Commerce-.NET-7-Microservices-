@@ -34,7 +34,8 @@
 
         public bool HasDiscount
         {
-            get =>!string.IsNullOrEmpty(DiscountCode);
+            //checks if discount code is not empty and discount rate has value, means there is discount
+            get =>!string.IsNullOrEmpty(DiscountCode)&&DiscountRate.HasValue;
         }
     }
 }

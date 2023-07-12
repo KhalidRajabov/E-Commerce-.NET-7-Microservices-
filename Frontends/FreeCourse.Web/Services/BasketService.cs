@@ -1,4 +1,5 @@
-﻿using FreeCourse.Shared.DTOs;
+﻿using AspNetCore;
+using FreeCourse.Shared.DTOs;
 using FreeCourse.Shared.Services;
 using FreeCourse.Web.Models.Basket;
 using FreeCourse.Web.Services.Interfaces;
@@ -10,11 +11,13 @@ namespace FreeCourse.Web.Services
     {
         private readonly HttpClient _httpClient;
         private readonly ISharedIdentityService _sharedIdentityService;
+        private readonly IDiscountService _discountService;
 
-        public BasketService(HttpClient httpClient, ISharedIdentityService sharedIdentityService)
+        public BasketService(HttpClient httpClient, ISharedIdentityService sharedIdentityService, IDiscountService discountService)
         {
             _httpClient = httpClient;
             _sharedIdentityService = sharedIdentityService;
+            _discountService = discountService;
         }
 
         public async Task AddBasketItem(BasketItemVIewModel basketItemVIewModel)
@@ -37,14 +40,29 @@ namespace FreeCourse.Web.Services
             await SaveOrUpdate(basket);
         }
 
-        public Task<bool> ApplyDiscount(string discountCode)
+        public async Task<bool> ApplyDiscount(string discountCode)
         {
-            throw new NotImplementedException();
+            await CancelApplyDiscount();
+
+            var basket = await Get();
+
+            if (basket == null || basket.DiscountCode == null) return false;
+
+            var hasDiscount= await _discountService.GetDiscount(discountCode);
+            if (hasDiscount == null) return false;
+
+            basket.DiscountRate=
         }
 
-        public Task<bool> CancelApplyDiscount()
+        public async Task<bool> CancelApplyDiscount()
         {
-            throw new NotImplementedException();
+           var basket = await Get();
+            if (basket == null ||basket.DiscountCode==null) return false;
+
+            basket.DiscountCode = null;
+            await SaveOrUpdate(basket);
+
+            return true;
         }
 
         public async Task<bool> Delete()
