@@ -23,9 +23,13 @@ namespace FreeCourse.Services.Basket.Services
 
         public async Task<Response<BasketDTO>> GetBasket(string userId)
         {
-            var existBasket = _redisService.GetDB().StringGet(userId);
+            var existBasket = await _redisService.GetDB().StringGetAsync(userId);
+
             if (String.IsNullOrEmpty(existBasket))
+            {
                 return Response<BasketDTO>.Fail("Basket not found", 404);
+            }
+
             return Response<BasketDTO>.Success(JsonSerializer.Deserialize<BasketDTO>(existBasket), 200);
         }
 

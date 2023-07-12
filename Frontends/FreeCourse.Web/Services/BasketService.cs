@@ -1,16 +1,20 @@
 ﻿using FreeCourse.Shared.DTOs;
+using FreeCourse.Shared.Services;
 using FreeCourse.Web.Models.Basket;
 using FreeCourse.Web.Services.Interfaces;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FreeCourse.Web.Services
 {
     public class BasketService : IBasketService
     {
         private readonly HttpClient _httpClient;
+        private readonly ISharedIdentityService _sharedIdentityService;
 
-        public BasketService(HttpClient httpClient)
+        public BasketService(HttpClient httpClient, ISharedIdentityService sharedIdentityService)
         {
             _httpClient = httpClient;
+            _sharedIdentityService = sharedIdentityService;
         }
 
         public async Task AddBasketItem(BasketItemVIewModel basketItemVIewModel)
@@ -26,6 +30,8 @@ namespace FreeCourse.Web.Services
             else
             {
                 basket = new BasketViewModel();
+                basket.UserId = _sharedIdentityService.GetUserId;
+                
                 basket.BasketItems.Add(basketItemVIewModel);
             }
             await SaveOrUpdate(basket);
@@ -78,7 +84,12 @@ namespace FreeCourse.Web.Services
 
         public async Task<bool> SaveOrUpdate(BasketViewModel basketViewModel)
         {
-            var response = await _httpClient.PostAsJsonAsync<BasketViewModel>("baskets",basketViewModel);
+            var response = await _httpClient.PostAsJsonAsync<BasketViewModel>("baskets", basketViewModel);
+            if (!response.IsSuccessStatusCode)
+            {
+                //hover over the "errorContent" variable in case of error
+                string errorContent = await response.Content.ReadAsStringAsync();
+            }
             return response.IsSuccessStatusCode;
         }
     }

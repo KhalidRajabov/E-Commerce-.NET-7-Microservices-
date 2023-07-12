@@ -2,15 +2,20 @@
 {
     public class BasketViewModel
     {
+        public BasketViewModel()
+        {
+            _basketItems = new List<BasketItemVIewModel>();
+        }
         public string UserId { get; set; }
         //discount coupon
         public string DiscountCode { get; set; }
         public int? DiscountRate { get; set; }
         private List<BasketItemVIewModel> _basketItems { get; set; }
-        public List<BasketItemVIewModel> BasketItems { 
+        public List<BasketItemVIewModel> BasketItems {
+
             get
             {
-                if (HasDiscount) 
+                if (HasDiscount)
                 {
                     _basketItems.ForEach(x =>
                     {
@@ -20,7 +25,10 @@
                 }
                 return _basketItems;
             }
-            set { _basketItems = value; }
+            set
+            {
+                _basketItems = value;
+            }
         }
         public decimal TotalPrice { get => _basketItems.Sum(x => x.GetCurrentPrice); }
 

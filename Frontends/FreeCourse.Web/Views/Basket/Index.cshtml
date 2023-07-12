@@ -1,7 +1,43 @@
-﻿
+﻿@model BasketViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="col-md-8 offset-md-2">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Card</h5>
+            @if(Model!=null&& Model.BasketItems.Any())
+            {
+                <table class="table table-striped">
+                    <tr>
+                        <th>Course name</th>
+                        <th>Course price</th>
+                        <th>Actions</th>
+                    </tr>
 
+                    @foreach (var item in Model.BasketItems)
+                    {
+                        <tr>
+                            <td>@item.CourseName</td>
+                            <td>@item.Price</td>
+                            <td><a class="btn btn-danger" asp-controller="basket" asp-action="RemoveBasketItem" asp-route-courseId="@item.CourseId">Delete</a></td>
+                        </tr>
+                    }
+                    @if (Model.HasDiscount)
+                    {
+                        <tr>
+                            <td>Discount rate</td>
+                            <td colspan="2">%@Model.DiscountRate.Value</td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <td>@(Model.HasDiscount?"Price with discount":"Total price")</td>
+                        <th colspan="2">@Model.TotalPrice USD</th>
+                    </tr>
+                </table>
+            }
+        </div>
+    </div>
+</div>

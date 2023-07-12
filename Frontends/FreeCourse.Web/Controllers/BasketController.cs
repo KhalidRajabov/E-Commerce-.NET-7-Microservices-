@@ -17,12 +17,13 @@ namespace FreeCourse.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             return View(await _basketService.Get());
         }
 
         public async Task<IActionResult> AddBasketItem(string courseId)
         {
+            if(!User.Identity.IsAuthenticated) return RedirectToAction(nameof(AuthController.SignIn), "Auth");
+
             var course = await _catalogService.GetCourseById(courseId);
             var basketItem = new BasketItemVIewModel
             {

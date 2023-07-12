@@ -23,6 +23,11 @@ namespace FreeCourse.Web.Services
             if (resultPhotoService != null) courseCreateInput.Picture = resultPhotoService.Url;
 
             var response = await _httpClient.PostAsJsonAsync<CourseCreateInput>("course", courseCreateInput);
+            if (!response.IsSuccessStatusCode)
+            {
+                //hover over the "errorContent" variable in case of error
+                string errorContent = await response.Content.ReadAsStringAsync();
+            }
 
             return response.IsSuccessStatusCode;
         }
@@ -43,7 +48,7 @@ namespace FreeCourse.Web.Services
             if (!response.IsSuccessStatusCode) return null;
 
             var successfullResponse = await response.Content.ReadFromJsonAsync<Response<List<CourseViewModel>>>();
-            successfullResponse.Data.ForEach(x =>
+            successfullResponse.Data.ForEach( x =>
             {
                 x.StockPictureUrl = _photoHelper.GetPhotoStockUrl(x.Picture);
             });
@@ -97,7 +102,19 @@ namespace FreeCourse.Web.Services
             if (!response.IsSuccessStatusCode) return null;
 
             var successfullResponse = await response.Content.ReadFromJsonAsync<Response<CourseViewModel>>();
+            successfullResponse.Data.Category=await GetCategoryById(successfullResponse.Data.CategoryId);
             successfullResponse.Data.StockPictureUrl=_photoHelper.GetPhotoStockUrl(successfullResponse.Data.Picture);
+            return successfullResponse.Data;
+        }
+
+        public async Task<CategoryViewModel> GetCategoryById(string categoryId)
+        {
+
+            var response = await _httpClient.GetAsync($"category/{categoryId}");
+            if (!response.IsSuccessStatusCode) return null;
+
+            var successfullResponse = await response.Content.ReadFromJsonAsync<Response<CategoryViewModel>>();
+            
             return successfullResponse.Data;
         }
 
