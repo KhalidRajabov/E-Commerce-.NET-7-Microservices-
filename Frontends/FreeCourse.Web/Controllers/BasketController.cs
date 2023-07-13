@@ -2,7 +2,6 @@
 using FreeCourse.Web.Models.Discount;
 using FreeCourse.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace FreeCourse.Web.Controllers
 {
@@ -46,10 +45,16 @@ namespace FreeCourse.Web.Controllers
 
         public async Task<IActionResult> ApplyDiscount(DiscountApplyInput discountApplyInput)
         {
+            if (!ModelState.IsValid)
+            {
+            //tempdata takes data and sends it to next page. Holds the data in cache
+                TempData["discountError"] = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).First();
+                return RedirectToAction(nameof(Index));
+            }
             var discountStatus = await _basketService.ApplyDiscount(discountApplyInput.Code);
 
             //tempdata takes data and sends it to next page. Holds the data in cache
-            TempData["discountStatus"]=discountApplyInput;
+            TempData["discountStatus"] = discountStatus;
             return RedirectToAction(nameof(Index));
         }
 

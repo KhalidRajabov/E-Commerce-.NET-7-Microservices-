@@ -1,9 +1,7 @@
-﻿using AspNetCore;
-using FreeCourse.Shared.DTOs;
+﻿using FreeCourse.Shared.DTOs;
 using FreeCourse.Shared.Services;
 using FreeCourse.Web.Models.Basket;
 using FreeCourse.Web.Services.Interfaces;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace FreeCourse.Web.Services
 {
@@ -46,24 +44,26 @@ namespace FreeCourse.Web.Services
 
             var basket = await Get();
 
-            if (basket == null || basket.DiscountCode == null) return false;
+            if (basket == null) return false;
 
             var hasDiscount= await _discountService.GetDiscount(discountCode);
             if (hasDiscount == null) return false;
 
-            basket.DiscountRate=
+            basket.ApplyDiscount(hasDiscount.Code, hasDiscount.Rate);
+            await SaveOrUpdate(basket);
+
+            return true;
         }
 
         public async Task<bool> CancelApplyDiscount()
         {
            var basket = await Get();
             if (basket == null ||basket.DiscountCode==null) return false;
-
-            basket.DiscountCode = null;
+            basket.CancelApplyDiscount();
             await SaveOrUpdate(basket);
-
             return true;
         }
+
 
         public async Task<bool> Delete()
         {

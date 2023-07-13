@@ -20,7 +20,7 @@
                     {
                         <tr>
                             <td>@item.CourseName</td>
-                            <td>@item.Price</td>
+                            <td>@item.Price USD @(Model.HasDiscount ? $"({Model.DiscountRate.Value}% applied)" : "")</td>
                             <td><a class="btn btn-danger" asp-controller="basket" asp-action="RemoveBasketItem" asp-route-courseId="@item.CourseId">Delete</a></td>
                         </tr>
                     }
@@ -34,7 +34,7 @@
 
                     <tr>
                         <td>@(Model.HasDiscount?"Price with discount":"Total price")</td>
-                        <th colspan="2">@Model.TotalPrice USD</th>
+                        <th colspan="2">@Model.TotalPrice USD </th>
                     </tr>
                 </table>
                 <form asp-controller="basket" asp-action="applydiscount">
@@ -42,6 +42,7 @@
                     {
                         <div class="alert alert-success">
                             "@Model.DiscountCode" has been applied
+                            <a asp-action="CancelApplyDiscount" asp-controller="basket">(Cancel)</a>
                         </div>
                     }
 
@@ -49,12 +50,19 @@
                     {
                         <div class="text-danger">Discount code is unavailable</div>
                     }
+                    @if (TempData["discountError"]!=null)
+                        {
+                        <div class="text-danger">@TempData["discountError"]</div>
+                    }
                     <div class="input-group mb-3">
                         <input type="text" name="DiscountApplyInput.Code" class="form-control">
-                        <div asp-validation-summary="All"></div>
                         <button class="btn btn-outline-secondary" type="submit">Apply</button>
                     </div>
                 </form>
+            }
+            else
+            {
+                <div class="alert alert-info">Basket empty</div>
             }
         </div>
     </div>

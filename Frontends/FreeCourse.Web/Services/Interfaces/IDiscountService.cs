@@ -1,6 +1,9 @@
-﻿namespace FreeCourse.Web.Services.Interfaces
+﻿using FreeCourse.Web.Models.Discount;
+
+namespace FreeCourse.Web.Services.Interfaces
 {
-    public class IDiscountService
+    public interface IDiscountService
     {
+        Task<DiscountViewModel> GetDiscount(string discountCode);
     }
 }
