@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewData["Title"] = "SuccessfulCheckout";
+}
+
+<div class="alert alert-info">
+    <p>Order(Payment) successfully completed</p>
+    <p>Order(Payment) no: @ViewBag.orderId</p>
+</div>
+<a class="btn btn-primary" asp-controller="home" asp-action="index">Home page</a>
