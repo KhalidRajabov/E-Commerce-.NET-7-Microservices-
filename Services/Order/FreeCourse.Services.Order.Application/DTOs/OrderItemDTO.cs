@@ -12,6 +12,5 @@ namespace FreeCourse.Services.Order.Application.DTOs
         public string ProductName { get; set; }
         public string PictureURL { get; set; }
         public Decimal Price { get; set; }
-
     }
 }

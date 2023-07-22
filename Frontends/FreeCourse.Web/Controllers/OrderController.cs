@@ -24,16 +24,27 @@ namespace FreeCourse.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(Checkoutİnfoİnput checkoutİnfoİnput)
         {
-            var orderStatus=await _orderService.CreateOrder(checkoutİnfoİnput);
-            if(!orderStatus.IsSuccessfull) 
+            //1st way: synchronous communication
+            //var orderStatus=await _orderService.CreateOrder(checkoutİnfoİnput);
+            
+            
+            //2nd way: asynchronous communication
+            var orderSuspend=await _orderService.SuspendOrder(checkoutİnfoİnput);
+            if(!orderSuspend.IsSuccessfull) 
             {
                 var basket = await _basketService.Get();
                 ViewBag.basket = basket;
-                ViewBag.error = orderStatus.Error;
+                ViewBag.error = orderSuspend.Error;
                 return RedirectToAction(nameof(Checkout));
             }
 
-            return RedirectToAction(nameof(SuccessfulCheckout), new { orderId=orderStatus.OrderId});
+            //1st way: synchronous communication
+            //return RedirectToAction(nameof(SuccessfulCheckout), new { orderId=orderStatus.OrderId});
+            
+            
+            
+            //2nd way: asynchronous communication
+            return RedirectToAction(nameof(SuccessfulCheckout), new { orderId = new Random().Next(1,1000)});
         }
 
         public IActionResult SuccessfulCheckout(int orderId)

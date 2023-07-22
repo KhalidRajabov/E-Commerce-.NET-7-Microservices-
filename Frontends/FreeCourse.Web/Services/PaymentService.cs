@@ -1,4 +1,6 @@
-﻿using FreeCourse.Web.Models.FakePayments;
+﻿using FreeCourse.Shared.DTOs;
+using FreeCourse.Web.Models.Catalog;
+using FreeCourse.Web.Models.FakePayments;
 using FreeCourse.Web.Services.Interfaces;
 
 namespace FreeCourse.Web.Services
@@ -15,6 +17,7 @@ namespace FreeCourse.Web.Services
         public async Task<bool> ReceivePayment(PaymentInfoInput paymentInfoInput)
         {
             var response = await _httpClient.PostAsJsonAsync<PaymentInfoInput>("fakepayments", paymentInfoInput);
+            var responseContent = await response.Content.ReadAsStringAsync();
             return response.IsSuccessStatusCode;
         }
     }

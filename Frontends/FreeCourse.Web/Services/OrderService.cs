@@ -22,35 +22,31 @@ namespace FreeCourse.Web.Services
             _sharedIdentityService = sharedIdentityService;
         }
 
-        public async Task<OrderCreateViewModel> CreateOrder(Checkoutİnfoİnput checkoutİnfoİnput)
+        public async Task<OrderCreatedViewModel> CreateOrder(Checkoutİnfoİnput checkoutInfoInput)
         {
             var basket = await _basketService.Get();
+
             var paymentInfoInput = new PaymentInfoInput()
             {
-                CardName = checkoutİnfoİnput.CardName,
-                CardNumber = checkoutİnfoİnput.CardNumber,
-                Expiration = checkoutİnfoİnput.Expiration,
-                CVV = checkoutİnfoİnput.CVV,
+                CardName = checkoutInfoInput.CardName,
+                CardNumber = checkoutInfoInput.CardNumber,
+                Expiration = checkoutInfoInput.Expiration,
+                CVV = checkoutInfoInput.CVV,
                 TotalPrice = basket.TotalPrice
             };
-            
             var responsePayment = await _paymentService.ReceivePayment(paymentInfoInput);
 
-            if (!responsePayment) return new OrderCreateViewModel() { Error="Payment unsuccessfull",IsSuccessfull=false};
+            if (!responsePayment)
+            {
+                return new OrderCreatedViewModel() { Error = "Ödeme alınamadı", IsSuccessfull = false };
+            }
 
             var orderCreateInput = new OrderCreateInput()
             {
                 BuyerId = _sharedIdentityService.GetUserId,
-                Address=new AddressCreateInput()
-                {
-                    District=checkoutİnfoİnput.District,
-                    Province=checkoutİnfoİnput.Province,
-                    Line=checkoutİnfoİnput.Line,
-                    Street=checkoutİnfoİnput.Street,
-                    ZipCode=checkoutİnfoİnput.Line
-                },
-
+                Address = new AddressCreateInput { Province = checkoutInfoInput.Province, District = checkoutInfoInput.District, Street = checkoutInfoInput.Street, Line = checkoutInfoInput.Line, ZipCode = checkoutInfoInput.ZipCode },
             };
+
             basket.BasketItems.ForEach(x =>
             {
                 var orderItem = new OrderItemCreateInput { ProductId = x.CourseId, Price = x.GetCurrentPrice, PictureUrl = "", ProductName = x.CourseName };
@@ -58,13 +54,17 @@ namespace FreeCourse.Web.Services
             });
 
             var response = await _httpClient.PostAsJsonAsync<OrderCreateInput>("orders", orderCreateInput);
-            if(!response.IsSuccessStatusCode) return new OrderCreateViewModel() { Error = "Order could not be made", IsSuccessfull = false };
-            string errorContent = await response.Content.ReadAsStringAsync();
 
-            var orderCratedVM = await response.Content.ReadFromJsonAsync<Response<OrderCreateViewModel>>();
-            orderCratedVM.Data.IsSuccessfull = true;
+            if (!response.IsSuccessStatusCode)
+            {
+                return new OrderCreatedViewModel() { Error = "Sipariş oluşturulamadı", IsSuccessfull = false };
+            }
+
+            var orderCreatedViewModel = await response.Content.ReadFromJsonAsync<Response<OrderCreatedViewModel>>();
+
+            orderCreatedViewModel.Data.IsSuccessfull = true;
             await _basketService.Delete();
-            return orderCratedVM.Data;
+            return orderCreatedViewModel.Data;
         }
 
         public async Task<List<OrderViewModel>> GetOrders()
@@ -73,9 +73,40 @@ namespace FreeCourse.Web.Services
             return response.Data; 
         }
 
-        public Task SuspendOrder(Checkoutİnfoİnput checkoutİnfoİnput)
+        public async Task<OrderSuspendViewModel> SuspendOrder(Checkoutİnfoİnput checkoutInfoInput)
         {
-            throw new NotImplementedException();
+            var basket = await _basketService.Get();
+            var orderCreateInput = new OrderCreateInput()
+            {
+                BuyerId = _sharedIdentityService.GetUserId,
+                Address = new AddressCreateInput { Province = checkoutInfoInput.Province, District = checkoutInfoInput.District, Street = checkoutInfoInput.Street, Line = checkoutInfoInput.Line, ZipCode = checkoutInfoInput.ZipCode },
+            };
+
+            basket.BasketItems.ForEach(x =>
+            {
+                var orderItem = new OrderItemCreateInput { ProductId = x.CourseId, Price = x.GetCurrentPrice, PictureUrl = "", ProductName = x.CourseName };
+                orderCreateInput.OrderItems.Add(orderItem);
+            });
+
+            var paymentInfoInput = new PaymentInfoInput()
+            {
+                CardName = checkoutInfoInput.CardName,
+                CardNumber = checkoutInfoInput.CardNumber,
+                Expiration = checkoutInfoInput.Expiration,
+                CVV = checkoutInfoInput.CVV,
+                TotalPrice = basket.TotalPrice,
+                Order = orderCreateInput
+            };
+
+            var responsePayment = await _paymentService.ReceivePayment(paymentInfoInput);
+
+            if (!responsePayment)
+            {
+                return new OrderSuspendViewModel() { Error = "Ödeme alınamadı", IsSuccessfull = false };
+            }
+
+            await _basketService.Delete();
+            return new OrderSuspendViewModel() { IsSuccessfull = true };
         }
     }
 }
